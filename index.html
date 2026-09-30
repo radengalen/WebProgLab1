@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Web Programming - Lab 1</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header>
+    <h1>Web Programming - Laboratory Work #1</h1>
+
+    <p>Student: Виджая Раден Гален Братасена</p>
+    <p>Group: P3230</p>
+    <p>Variant: 22711</p>
+</header>
+
+<main>
+
+    <!-- GRAPH -->
+    <section class="graph-section">
+
+        <h2>Coordinate Plane</h2>
+
+        <canvas
+            id="graph"
+            width="500"
+            height="500">
+        </canvas>
+
+    </section>
+
+
+    <!-- FORM -->
+    <section class="form-section">
+
+        <h2>Point Check</h2>
+
+        <form id="point-form">
+
+            <!-- X -->
+            <div class="input-group">
+
+                <p>X:</p>
+
+                <div class="x-options">
+
+                    <label>
+                        <input type="checkbox" name="x" value="-2">
+                        -2
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="-1.5">
+                        -1.5
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="-1">
+                        -1
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="-0.5">
+                        -0.5
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="0">
+                        0
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="0.5">
+                        0.5
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="1">
+                        1
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="1.5">
+                        1.5
+                    </label>
+
+                    <label>
+                        <input type="checkbox" name="x" value="2">
+                        2
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <!-- Y -->
+            <div class="input-group">
+
+                <label for="y-input">Y:</label>
+
+                <input
+                    type="text"
+                    id="y-input"
+                    name="y"
+                    placeholder="Enter a number from -5 to 5"
+                >
+
+            </div>
+
+
+            <!-- R -->
+            <div class="input-group">
+
+                <p>R:</p>
+
+                <div class="r-options">
+
+                    <label>
+                        <input type="radio" name="r" value="1">
+                        1
+                    </label>
+
+                    <label>
+                        <input type="radio" name="r" value="2">
+                        2
+                    </label>
+
+                    <label>
+                        <input type="radio" name="r" value="3">
+                        3
+                    </label>
+
+                    <label>
+                        <input type="radio" name="r" value="4">
+                        4
+                    </label>
+
+                    <label>
+                        <input type="radio" name="r" value="5">
+                        5
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div id="error-message" class="error-message"></div>
+
+            <button type="submit">
+                Check Point
+            </button>
+
+        </form>
+
+    </section>
+
+
+    <!-- RESULTS -->
+    <section class="results-section">
+
+        <h2>Results</h2>
+
+        <div class="table-wrapper">
+
+            <table id="results-table">
+
+                <thead>
+                    <tr>
+                        <th>X</th>
+                        <th>Y</th>
+                        <th>R</th>
+                        <th>Result</th>
+                        <th>Date and Time</th>
+                    </tr>
+                </thead>
+
+                <tbody id="results-body">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
