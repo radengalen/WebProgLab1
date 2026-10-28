@@ -37,8 +37,8 @@ form.addEventListener("submit", event => {
         showError("Please select an X value.");
         return;
     }
-    const x = Number(selectedX.value);
 
+    const x = Number(selectedX.value);
     const yText = yInput.value.trim().replace(",", ".");
     const numberPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/;
 
@@ -65,6 +65,7 @@ form.addEventListener("submit", event => {
     }
 
     const selectedR = document.querySelector('input[name="r"]:checked');
+
     if (!selectedR) {
         showError("Please select an R value.");
         return;
@@ -170,7 +171,9 @@ function drawGraph(r) {
     const height = canvas.height;
     const centerX = width / 2;
     const centerY = height / 2;
-    const scale = Math.min(width, height) * 0.32 / r;
+
+    // Fixed scale for R = 1 to 5
+    const scale = Math.min(width, height) * 0.32 / 5;
 
     ctx.clearRect(0, 0, width, height);
     ctx.fillStyle = "#3b95e8";
@@ -231,17 +234,24 @@ function drawGraph(r) {
 
     ctx.stroke();
 
-    // X ticks
-    drawTick(centerX - r * scale, centerY, "-R", true);
-    drawTick(centerX - (r / 2) * scale, centerY, "-R/2", true);
-    drawTick(centerX + (r / 2) * scale, centerY, "R/2", true);
-    drawTick(centerX + r * scale, centerY, "R", true);
+    // Fixed X and Y labels: -5 to 5
+    for (let value = -5; value <= 5; value++) {
+        if (value === 0) continue;
 
-    // Y ticks
-    drawTick(centerX, centerY - r * scale, "R", false);
-    drawTick(centerX, centerY - (r / 2) * scale, "R/2", false);
-    drawTick(centerX, centerY + (r / 2) * scale, "-R/2", false);
-    drawTick(centerX, centerY + r * scale, "-R", false);
+        drawTick(
+            centerX + value * scale,
+            centerY,
+            String(value),
+            true
+        );
+
+        drawTick(
+            centerX,
+            centerY - value * scale,
+            String(value),
+            false
+        );
+    }
 
     ctx.font = "14px sans-serif";
     ctx.fillText("X", width - 18, centerY - 8);
@@ -271,7 +281,9 @@ function drawTick(x, y, label, horizontal) {
 function drawPoint(x, y, r, hit) {
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
-    const scale = Math.min(canvas.width, canvas.height) * 0.32 / r;
+
+    // Same fixed scale as the graph
+    const scale = Math.min(canvas.width, canvas.height) * 0.32 / 5;
 
     const pointX = centerX + x * scale;
     const pointY = centerY - y * scale;
