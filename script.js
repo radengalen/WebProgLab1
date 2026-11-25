@@ -148,15 +148,9 @@ function loadResults() {
             return [];
         }
 
-        const validResults = parsed.filter(isValidResult);
-        const skipped = parsed.length - validResults.length;
-        storageWritable = skipped === 0;
-
-        if (skipped > 0) {
-            showStorageWarning(`${skipped} invalid history row(s) were skipped. Valid rows are shown. Stored data has not been changed. Fix it and reload; new results are shown only for this session.`);
-        }
-
-        return validResults;
+        // Ignore invalid rows; the next submission saves valid history normally.
+        storageWritable = true;
+        return parsed.filter(isValidResult);
     } catch {
         showStorageWarning("Saved history could not be read. Check LocalStorage access and JSON format (text needs double quotes). Stored data has not been changed. Fix it and reload; new results are shown only for this session.");
         return [];
