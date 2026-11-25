@@ -4,10 +4,15 @@ const yInput = document.getElementById("y-input");
 const rRadios = document.querySelectorAll('input[name="r"]');
 const errorMessage = document.getElementById("error-message");
 const resultsBody = document.getElementById("results-body");
+const storageMessage = document.getElementById("storage-message");
 const canvas = document.getElementById("graph");
 const ctx = canvas.getContext("2d");
 
 const STORAGE_KEY = "webLab1Results";
+const X_VALUES = [-2, -1.5, -1, -0.5, 0, 0.5, 1, 1.5, 2];
+const R_VALUES = [1, 2, 3, 4, 5];
+let loadedStorage = null;
+let storageWritable = false;
 let results = loadResults();
 
 // Only one X can be selected
@@ -110,20 +115,67 @@ function checkHit(x, y, r) {
 
 // LocalStorage
 function saveResults() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(results));
+    // Do not overwrite damaged data or edits made in DevTools/another tab.
+    if (!storageWritable) return;
+
+    try {
+        if (localStorage.getItem(STORAGE_KEY) !== loadedStorage) {
+            showStorageWarning("Saved history has changed. New results are shown only for this session. Reload the page to read the edited history.");
+            return;
+        }
+
+        const saved = JSON.stringify(results);
+        localStorage.setItem(STORAGE_KEY, saved);
+        loadedStorage = saved;
+        showStorageWarning("");
+    } catch {
+        showStorageWarning("History could not be saved. New results are shown only for this session.");
+    }
 }
 
 function loadResults() {
     try {
-        const saved = localStorage.getItem(STORAGE_KEY);
+        loadedStorage = localStorage.getItem(STORAGE_KEY);
 
-        if (!saved) return [];
+        if (loadedStorage === null) {
+            storageWritable = true;
+            return [];
+        }
 
-        const parsed = JSON.parse(saved);
-        return Array.isArray(parsed) ? parsed : [];
+        const parsed = JSON.parse(loadedStorage);
+        if (!Array.isArray(parsed)) {
+            showStorageWarning("Saved history must be a JSON array. Stored data has not been changed. Fix it and reload; new results are shown only for this session.");
+            return [];
+        }
+
+        const validResults = parsed.filter(isValidResult);
+        const skipped = parsed.length - validResults.length;
+        storageWritable = skipped === 0;
+
+        if (skipped > 0) {
+            showStorageWarning(`${skipped} invalid history row(s) were skipped. Valid rows are shown. Stored data has not been changed. Fix it and reload; new results are shown only for this session.`);
+        }
+
+        return validResults;
     } catch {
+        showStorageWarning("Saved history could not be read. Check LocalStorage access and JSON format (text needs double quotes). Stored data has not been changed. Fix it and reload; new results are shown only for this session.");
         return [];
     }
+}
+
+function isValidResult(result) {
+    return result !== null && typeof result === "object" &&
+        X_VALUES.includes(result.x) &&
+        Number.isFinite(result.y) && result.y > -5 && result.y < 5 &&
+        R_VALUES.includes(result.r) &&
+        typeof result.hit === "boolean" &&
+        Number.isFinite(result.timestamp) &&
+        Number.isFinite(new Date(result.timestamp).getTime());
+}
+
+function showStorageWarning(message) {
+    storageMessage.textContent = message;
+    storageMessage.hidden = message === "";
 }
 
 function formatDate(timestamp) {

@@ -109,8 +109,11 @@
                     type="text"
                     id="y-input"
                     name="y"
-                    placeholder="Enter a number from -5 to 5"
+                    placeholder="Example: 4.9 or 4,9"
+                    aria-describedby="y-help error-message"
                 >
+
+                <p id="y-help">Enter a number strictly between -5 and 5. Text is checked when you submit.</p>
 
             </div>
 
@@ -168,6 +171,8 @@
 
         <h2>Results</h2>
 
+        <p id="storage-message" class="error-message" role="status" hidden></p>
+
         <div class="table-wrapper">
 
             <table id="results-table">
@@ -194,7 +199,7 @@
 </main>
 
 
-<script src="script.js"></script>
+<script src="script.js?v=2"></script>
 
 </body>
 </html>
